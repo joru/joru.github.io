@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>check screen contrast</title>
+    <meta name="color-scheme" content="only dark">
+    <style>
+        #here,
+        #here * {
+            margin: 0;
+            padding: 0;
+            line-height: 0;
+        }
+
+        .cell {
+            display: inline-block;
+            width: 15mm;
+            height: 15mm;
+            position: relative;
+            background-color: pink;
+        }
+        .cell::before,.cell::after{
+            content: "";
+            width: 8%;
+            height: 8%;
+            position: absolute;
+        }
+        .cell::before{
+            top: 0;
+            left: 0;
+            background: #000;
+        }
+        .cell::after{
+            bottom: 0;
+            right: 0;
+            background: #fff;
+        }
+
+        .cell>div {
+            position: absolute;
+            top: 10%;
+            bottom: 10%;
+            left: 10%;
+            right: 10%;
+            border-radius: 25%;
+            background-color: palevioletred;
+            transform: rotate(45deg);
+        }
+    </style>
+    <script>
+        console.log("[1]");
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("[2]");
+            let distance_input = document.querySelector("input[name=distance]");
+            let work = function () {
+                console.log("[3]");
+                let box=document.querySelector("#here");
+                let d=distance_input.valueAsNumber;
+                while(box.lastChild){
+                    box.removeChild(box.lastChild);
+                }
+                for(let l=0;;l++){
+                    let h=l+d;
+                    if(h>=256){
+                        break;
+                    }
+                    let cn=document.createElement('div');
+                    cn.setAttribute("class","cell");
+                    let dn=document.createElement('div');
+                    let f=function(v){return `background:rgb(${v},${v},${v})`;};
+                    cn.setAttribute("style",f(l));
+                    dn.setAttribute("style",f(h));
+                    cn.appendChild(dn);
+                    box.appendChild(cn);
+                }
+                console.log("[4]");
+            };
+            distance_input.addEventListener("change", work);
+            console.log("[5]");
+            work();
+            console.log("[6]");
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+        <fieldset>
+            <legend>Settings</legend>
+            <form><label><input name="distance" type="number" min="0" max="32" step="1" value="2">Distance</label>
+            </form>
+        </fieldset>
+    </header>
+    <div id="here">
+        <div class="cell">
+            <div></div>
+        </div>
+    </div>
+</body>
+
+</html>
